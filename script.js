@@ -3,10 +3,27 @@ let game = new Phaser.Game(1717, 916, Phaser.CANVAS, 'bloque_juego');
 let imgRoute = "img/";
 
 let mainBoat;
+let bulletActive = false;
 
 let rightKey, leftKey, upKey, downKey, spaceKey;
 
-let bulletActive = false;
+let maxHP = 100;
+let currentHP = 1;
+
+function updateGrauFace() {
+    const porcentaje = (currentHP / maxHP) * 100;
+    const face = document.getElementById('grau-face');
+
+    if (porcentaje > 50) {
+        face.src = `${imgRoute}personaje-principal/sprite-miguel-grau-normal.png`; 
+    } else if (porcentaje > 15) {
+        face.src = `img/personaje-principal/sprite-miguel-grau-herido-50.png`; 
+    } else {
+        face.src = `img/personaje-principal/sprite-miguel-grau-herido-80.png`;
+    }
+}
+
+updateGrauFace();
 
 let initialState = {
     preload: () => {
@@ -27,10 +44,10 @@ let initialState = {
         //mainBoat.scale = 1;
         game.physics.arcade.enable(mainBoat);
 
-        mainBoat.animations.add('down',  [1],  8, true);
+        mainBoat.animations.add('down',  [0, 1],  8, true);
         mainBoat.animations.add('left',  [5],  8, true);
         mainBoat.animations.add('right', [7], 8, true);
-        mainBoat.animations.add('up',    [11], 8, true);
+        mainBoat.animations.add('up',    [10, 11], 8, true);
 
         // Enemy boat
         enemy = game.add.sprite(1400, game.height / 2, 'enemyBoat');
