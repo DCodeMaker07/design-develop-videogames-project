@@ -136,10 +136,10 @@ function showDialogue(index) {
                 .to({ volume: 0 }, 1000, Phaser.Easing.Linear.None, true)
                 .onComplete.add(() => {
                     game.scene1Music.stop();
-                    game.state.start('main');
+                    game.state.start('scene2');
                 });
         } else {
-            game.state.start('main');
+            game.state.start('scene2');
         }
         return;
     }
