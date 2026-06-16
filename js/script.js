@@ -31,6 +31,8 @@ let initialState = {
 
         game.physics.arcade.enable(mainBoat);
 
+        document.getElementById('grau-face').style.display = 'block';
+
         createEnemy();
         createBullet();
         // setupSpeech();
