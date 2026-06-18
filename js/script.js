@@ -72,6 +72,10 @@ let initialState = {
 game.state.add('intro', introState);
 game.state.add('scene1', scene1State);
 game.state.add('scene2', scene2State);
-game.state.add('main', initialState);
+game.state.add('firstAct', initialState);
+game.state.add('intro2', intro2State);
+game.state.add('scene3', scene3State);
+game.state.add('secondAct', main2State);
+game.state.add('ending', endingState);
 
-game.state.start('scene2');
+game.state.start('firstAct');
