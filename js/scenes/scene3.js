@@ -268,7 +268,7 @@ function startScene3Transition() {
                 .onComplete.add(() => {
                     game.add.tween(flash)
                         .to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
-                        .onComplete.add(() => game.state.start('main2'));
+                        .onComplete.add(() => game.state.start('secondAct'));
                 });
         });
 }

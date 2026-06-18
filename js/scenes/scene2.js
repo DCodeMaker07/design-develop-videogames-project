@@ -21,7 +21,7 @@ let scene2State = {
         game.load.audio('textSound', 'audio/text-digit-sound.mp3');
         game.load.image('background-scene2', 'img/fondo/ocean-background-3.png');
         game.load.spritesheet('mainBoat-scene2', 'img/personaje-principal/barco/huascar_sprite_sheet.png', 360, 360);
-        game.load.spritesheet('enemyBoat-scene2', 'img/enemigos/sprite_sheet_barco_chileno.png', 460, 384);
+        game.load.spritesheet('enemyBoat-scene2', 'img/enemigos/sprite_sheet_barco_chileno-2.png', 690, 576);
         game.load.spritesheet('sprite-grau-scene2', 'img/escenas/sprite-grau.png', 384, 384);
         game.load.spritesheet('sprite-prat-scene2', 'img/escenas/arturo-prat-sprite-sheet.png', 896, 896);
     },
@@ -234,18 +234,27 @@ function startBattleEntrance() {
     // El barco chileno entra desde la derecha hasta su posición de batalla
     let entranceEnemy = game.add.sprite(game.width + 300, BATTLE_POSITIONS.enemyY, 'enemyBoat-scene2');
     entranceEnemy.anchor.setTo(0.5);
-    entranceEnemy.frame = 1;
+    entranceEnemy.scale.x = -1;
+    entranceEnemy.width = 300; entranceEnemy.height = 250;
+    entranceEnemy.animations.add('move', [0, 1, 2, 3], 6, true);
+    entranceEnemy.animations.play('move');
 
     // Dos barcos chilenos de escolta, uno arriba y otro abajo (decorativos)
     const escortOffsetY = 220;
 
     let entranceEnemyTop = game.add.sprite(game.width + 300, BATTLE_POSITIONS.enemyY - escortOffsetY, 'enemyBoat-scene2');
     entranceEnemyTop.anchor.setTo(0.5);
-    entranceEnemyTop.frame = 1;
+    entranceEnemyTop.scale.x = -1;
+    entranceEnemyTop.width = 300; entranceEnemyTop.height = 250;
+    entranceEnemyTop.animations.add('move', [0, 1, 2, 3], 6, true);
+    entranceEnemyTop.animations.play('move');
 
     let entranceEnemyBottom = game.add.sprite(game.width + 300, BATTLE_POSITIONS.enemyY + escortOffsetY, 'enemyBoat-scene2');
     entranceEnemyBottom.anchor.setTo(0.5);
-    entranceEnemyBottom.frame = 1;
+    entranceEnemyBottom.scale.x = -1;
+    entranceEnemyBottom.width = 300; entranceEnemyBottom.height = 250;
+    entranceEnemyBottom.animations.add('move', [0, 1, 2, 3], 6, true);
+    entranceEnemyBottom.animations.play('move');
 
     game.add.tween(entranceEnemyTop)
         .to({ x: BATTLE_POSITIONS.enemyX + 80 }, entranceDuration, Phaser.Easing.Quadratic.Out, true);
@@ -256,9 +265,16 @@ function startBattleEntrance() {
     game.add.tween(entranceEnemy)
         .to({ x: BATTLE_POSITIONS.enemyX }, entranceDuration, Phaser.Easing.Quadratic.Out, true)
         .onComplete.add(() => {
-            // Ambas flotas llegaron a sus posiciones de combate
-            game.time.events.add(400, () => {
-                game.state.start('firstAct');
+            // Flash rápido para ocultar el pop-in del cambio de state
+            game.time.events.add(300, () => {
+                let flash = game.add.graphics();
+                flash.beginFill(0xffffff, 1);
+                flash.drawRect(0, 0, 1717, 916);
+                flash.endFill();
+                flash.alpha = 0;
+                game.add.tween(flash)
+                    .to({ alpha: 1 }, 180, Phaser.Easing.Linear.None, true)
+                    .onComplete.add(() => game.state.start('firstAct'));
             });
         });
 }
