@@ -45,7 +45,7 @@ let introState = {
                             .to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 300)
                             .onComplete.add(() => {
                                 // Espera 2 segundos y pasa a scene1
-                                game.time.events.add(2000, () => {
+                                game.time.events.add(1000, () => {
                                     // Fade out todo
                                     game.add.tween(fecha).to({ alpha: 0 }, 800, Phaser.Easing.Linear.None, true);
                                     game.add.tween(lugar).to({ alpha: 0 }, 800, Phaser.Easing.Linear.None, true);
