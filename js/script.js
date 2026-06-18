@@ -9,7 +9,7 @@ let initialState = {
 
         game.load.image('background', 'img/fondo/ocean-background-3.png');
         game.load.spritesheet('mainBoat', 'img/personaje-principal/barco/huascar_sprite_sheet.png', 360, 360);
-        game.load.spritesheet('enemyBoat', 'img/enemigos/sprite_sheet_barco_chileno.png', 460, 384);
+        game.load.spritesheet('enemyBoat', 'img/enemigos/sprite_sheet_barco_chileno-2.png', 690, 576);
     },
     create: () => {
         hudInGame.style.display = "flex";
@@ -72,10 +72,10 @@ let initialState = {
 game.state.add('intro', introState);
 game.state.add('scene1', scene1State);
 game.state.add('scene2', scene2State);
-game.state.add('firstAct', initialState);
+game.state.add('firstAct', firstActState);
 game.state.add('intro2', intro2State);
 game.state.add('scene3', scene3State);
 game.state.add('secondAct', main2State);
 game.state.add('ending', endingState);
 
-game.state.start('firstAct');
+game.state.start('intro');
