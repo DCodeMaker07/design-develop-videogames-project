@@ -11,7 +11,7 @@ let textBlip
 const dialogues = [
     { character: 'PRADO', text: 'Almirante Grau, la situación es crítica. Chile ha declarado la guerra y su flota supera a la nuestra.', speaker: 'prado' },
     { character: 'GRAU', text: 'Lo sé, mi Presidente. Pero mientras el Huáscar flote, el Perú no estará indefenso.', speaker: 'grau' },
-    { character: 'PRADO', text: 'Necesito que proteja nuestras costas. Iquique está bloqueada por la Esmeralda y la Covadonga.', speaker: 'prado' },
+    { character: 'PRADO', text: 'Necesito que proteja nuestras costas. Iquique está bloqueada la armada de Arturo Prat.', speaker: 'prado' },
     { character: 'GRAU', text: 'Partiré de inmediato. Le juro que cumpliré con mi deber hasta el último aliento.', speaker: 'grau' },
     { character: 'PRADO', text: 'Que Dios lo acompañe, Almirante. El Perú confía en usted.', speaker: 'prado' },
 ];
