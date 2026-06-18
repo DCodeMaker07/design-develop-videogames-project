@@ -2,40 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Combate Naval de Angamos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="index.css">
 </head>
 
-<body class="bg-zinc-200 w-full">
-    <div class="min-h-svh flex justify-center items-center">
-        <div id="bloque_juego"></div>
-    </div>
+<body>
+    <div id="bloque_juego"></div>
 
-    <!-- HUD acto 1 (main) -->
-    <div class="absolute z-10 top-[1.5rem] left-[6.5rem] w-[20%] flex flex-col" id="hud-in-game">
-        <div class="w-[16rem] h-[14rem] rounded-lg py-4 px-2 w-full flex justify-start align-left">
-            <img id="grau-face" src="" class=" object-contain"
-                style="image-rendering: pixelated;">
-        </div>
-    </div>
+    <!-- HUD wrapper — se posiciona y escala junto al canvas via syncHUD() -->
+    <div id="hud-wrapper">
 
-    <!-- HUD acto final (main2) -->
-    <div class="absolute z-10 top-[1.5rem] left-[6.5rem] flex flex-col gap-1" id="hud-main2" style="display:none">
-        <div class="w-[14rem] h-[12rem] rounded-lg py-2 px-2 flex justify-start">
-            <img id="grau-face-2" src="img/personaje-principal/cara/sprite-miguel-grau-normal.png"
-                class="object-contain" style="image-rendering: pixelated;">
+        <!-- HUD acto 1 (initialState legacy) -->
+        <div id="hud-in-game">
+            <img id="grau-face" src="">
         </div>
-        <div id="wave-counter" class="text-white font-bold text-lg px-2 drop-shadow"
-            style="font-family:monospace">Oleada 1</div>
-        <div class="mx-2 h-4 rounded-full overflow-hidden" style="background:#333;width:13rem">
-            <div id="hp-bar" class="h-full rounded-full transition-all"
-                style="width:100%;background:#e53e3e"></div>
+
+        <!-- HUD acto final (firstAct + secondAct) -->
+        <div id="hud-main2">
+            <img id="grau-face-2" src="img/personaje-principal/cara/sprite-miguel-grau-normal.png">
+            <div id="wave-counter">Oleada 1</div>
+            <div id="hp-bar-track">
+                <div id="hp-bar"></div>
+            </div>
         </div>
+
     </div>
 
     <script src="phaser.js"></script>

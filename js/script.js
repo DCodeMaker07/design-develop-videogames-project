@@ -1,5 +1,32 @@
 let game = new Phaser.Game(1717, 916, Phaser.CANVAS, 'bloque_juego');
 
+//HUD sync
+function syncHUD() {
+    const canvas  = document.querySelector('#bloque_juego canvas');
+    const wrapper = document.getElementById('hud-wrapper');
+    if (!canvas || !wrapper) return;
+    const rect  = canvas.getBoundingClientRect();
+    const scale = rect.width / 1717;
+    wrapper.style.left      = rect.left + 'px';
+    wrapper.style.top       = rect.top  + 'px';
+    wrapper.style.transform = 'scale(' + scale + ')';
+}
+
+window.addEventListener('resize', syncHUD);
+
+// Boot state 
+let bootState = {
+    create: () => {
+        game.scale.scaleMode             = Phaser.ScaleManager.SHOW_ALL;
+        game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically   = true;
+        game.scale.setMinMax(400, 214, 1717, 916);
+        game.scale.onSizeChange.add(syncHUD);
+        setTimeout(syncHUD, 50);
+        game.state.start('intro');
+    }
+};
+
 let background;
 
 let initialState = {
@@ -69,6 +96,7 @@ let initialState = {
     }
 };
 
+game.state.add('boot', bootState);
 game.state.add('intro', introState);
 game.state.add('scene1', scene1State);
 game.state.add('scene2', scene2State);
@@ -78,4 +106,4 @@ game.state.add('scene3', scene3State);
 game.state.add('secondAct', main2State);
 game.state.add('ending', endingState);
 
-game.state.start('intro');
+game.state.start('boot');

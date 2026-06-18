@@ -1,7 +1,101 @@
 * {
     font-family: "Nunito", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #18181b;
+}
+
+#bloque_juego {
+    width: 100%;
+    height: 100%;
 }
 
 canvas {
     border-radius: 10px;
+    display: block;
+}
+
+/* ── HUD wrapper ──────────────────────────────────────────────────────────
+   Posicionado en la esquina top-left del canvas via syncHUD().
+   Su ancho/alto natural es 1717×916 (espacio de coordenadas del juego);
+   transform: scale(factor) lo encoge junto al canvas sin cambiar las
+   posiciones internas de los hijos. pointer-events: none deja pasar
+   los clicks al canvas.                                                   */
+#hud-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1717px;
+    height: 916px;
+    transform-origin: top left;
+    pointer-events: none;
+    z-index: 10;
+    overflow: visible;
+}
+
+/* ── HUD acto 1 ─────────────────────────────────────────────────────────── */
+#hud-in-game {
+    display: none;
+    position: absolute;
+    top: 24px;
+    left: 104px;
+    width: 256px;
+    height: 224px;
+}
+
+#hud-in-game img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+/* ── HUD acto final ─────────────────────────────────────────────────────── */
+#hud-main2 {
+    display: none;
+    position: absolute;
+    top: 24px;
+    left: 104px;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#hud-main2 img {
+    width: 224px;
+    height: 192px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+#wave-counter {
+    color: #ffffff;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 0 8px;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.9));
+}
+
+#hp-bar-track {
+    margin: 0 8px;
+    height: 16px;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: #333;
+    width: 208px;
+}
+
+#hp-bar {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.3s;
+    background: #e53e3e;
+    width: 100%;
 }
