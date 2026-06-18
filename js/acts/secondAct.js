@@ -1,4 +1,4 @@
-// Configuración de oleadas — se reinicia en cada create()
+// Configuración de oleadas
 let waveEnemyCount = 3;
 let waveEnemySpeed = 80;
 let waveEnemyFireRate = 2500;
@@ -25,7 +25,7 @@ let main2State = {
     preload: () => {
         game.load.image('bg-main2', 'img/fondo/ocean-background-3.png');
         game.load.spritesheet('player-main2', 'img/personaje-principal/barco/huascar_sprite_sheet.png', 360, 360);
-        game.load.spritesheet('enemy-main2', 'img/enemigos/sprite_sheet_barco_chileno.png', 460, 384);
+        game.load.spritesheet('enemy-main2', 'img/enemigos/sprite_sheet_barco_chileno-2.png', 690, 576);
         game.load.audio('bgMusic2', 'audio/final-act-background-2.m4a');
     },
 
@@ -201,7 +201,10 @@ function spawnWave2() {
         let xPos = 1717 + i * 200;
         let e = main2Enemies.create(xPos, yPos, 'enemy-main2');
         e.anchor.setTo(0.5);
-        e.frame = 1;
+        e.scale.x = -1;
+        e.width = 300; e.height = 250;
+        e.animations.add('move', [0, 1, 2, 3], 6, true);
+        e.animations.play('move');
         e.body.velocity.x = -waveEnemySpeed;
         e.fireTimer = waveEnemyFireRate + Phaser.Math.between(0, 1500);
     }
