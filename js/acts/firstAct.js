@@ -27,6 +27,12 @@ let fa1RightKey, fa1LeftKey, fa1UpKey, fa1DownKey, fa1SpaceKey;
 let fa1WKey, fa1AKey, fa1SKey, fa1DKey;
 let fa1QKey;
 
+let fa1SprintStamina = 100;
+let fa1SprintToggle  = false;
+let fa1PlayerSpeed     = 2;
+let fa1DamageTakenMult = 1;
+let fa1BossHPMult      = 1;
+
 const fa1WaveConfigs = [
     { count: 3, speed: 100, fireRate: 2200 },
     { count: 4, speed: 115, fireRate: 2000 },
@@ -57,7 +63,7 @@ let firstActState = {
         fa1PlayerInvincible = false;
         fa1BossPhase = false;
         fa1Boss = null;
-        fa1BossHP = 5;
+        fa1BossHP = Math.max(1, Math.round(5 * fa1BossHPMult));
         fa1BossEscortTimer = null;
         fa1BossEscortAlt = false;
         fa1BossHPBar = null;
@@ -65,6 +71,12 @@ let firstActState = {
         specialReady    = false;
         specialActive   = false;
         causaGroup      = null;
+        fa1SprintStamina = 100;
+        fa1SprintToggle  = false;
+        const diff = window.DIFFICULTY_SETTINGS[window.gameDifficulty || 'normal'];
+        fa1PlayerSpeed     = 2 * diff.playerSpeedMult;
+        fa1DamageTakenMult = diff.damageTakenMult;
+        fa1BossHPMult      = diff.bossHPMult;
 
         let hud = document.getElementById('hud-main2');
         if (hud) hud.style.display = 'flex';
@@ -177,18 +189,31 @@ let firstActState = {
 
         fa1Background.tilePosition.x -= 1;
 
+        // Sprint
+        const fa1Moving = fa1RightKey.isDown || fa1DKey.isDown || fa1LeftKey.isDown || fa1AKey.isDown ||
+                          fa1UpKey.isDown || fa1WKey.isDown || fa1DownKey.isDown || fa1SKey.isDown;
+        const fa1Sprinting = (game.input.keyboard.isDown(17) || fa1SprintToggle) && fa1SprintStamina > 0 && fa1Moving;
+        if (fa1Sprinting) {
+            fa1SprintStamina = Math.max(0, fa1SprintStamina - game.time.elapsed * 0.02);
+            if (fa1SprintStamina <= 0) fa1SprintToggle = false;
+        } else {
+            fa1SprintStamina = Math.min(100, fa1SprintStamina + game.time.elapsed * 0.01);
+        }
+        updateFa1SprintBar();
+        const fa1Speed = fa1Sprinting ? fa1PlayerSpeed * 2 : fa1PlayerSpeed;
+
         // Movimiento jugador
         if (fa1RightKey.isDown || fa1DKey.isDown) {
-            fa1Player.x += 2;
+            fa1Player.x += fa1Speed;
             fa1Player.animations.play('right');
             fa1Player.scale.x = -1;
         } else if (fa1LeftKey.isDown || fa1AKey.isDown) {
-            fa1Player.x -= 2;
+            fa1Player.x -= fa1Speed;
             fa1Player.scale.x = 1;
         } else if (fa1UpKey.isDown || fa1WKey.isDown) {
-            fa1Player.y -= 2;
+            fa1Player.y -= fa1Speed;
         } else if (fa1DownKey.isDown || fa1SKey.isDown) {
-            fa1Player.y += 2;
+            fa1Player.y += fa1Speed;
         }
 
         fa1Player.x = Phaser.Math.clamp(fa1Player.x, 0, 800);
@@ -288,7 +313,7 @@ let firstActState = {
             // Barra de HP sigue al boss
             if (fa1BossHPBar) {
                 fa1BossHPBar.x = fa1Boss.x;
-                fa1BossHPBar.y = fa1Boss.y + 230;
+                fa1BossHPBar.y = fa1Boss.y + 150;
             }
         }
 
@@ -381,7 +406,7 @@ function startFa1BossPhase() {
     // Barra de HP del boss — sigue al sprite en update()
     fa1BossHPBar = game.add.graphics();
     fa1BossHPBar.x = fa1Boss.x;
-    fa1BossHPBar.y = fa1Boss.y + 230;
+    fa1BossHPBar.y = fa1Boss.y + 150;
     drawFa1BossHPBar();
 
     game.add.tween(fa1Boss)
@@ -513,7 +538,7 @@ function fireFa1BossBurst() {
 function takeDamageFa1(amount) {
     if (fa1Dead || fa1PlayerInvincible) return;
 
-    fa1HP = Math.max(0, fa1HP - amount);
+    fa1HP = Math.max(0, fa1HP - Math.round(amount * fa1DamageTakenMult));
     updateFa1HUD();
 
     fa1Player.exists = true;
@@ -555,6 +580,11 @@ function updateFa1HUD() {
     if (hpBar) hpBar.style.width = (fa1HP / fa1MaxHP * 100) + '%';
 }
 
+function updateFa1SprintBar() {
+    let bar = document.getElementById('sprint-bar');
+    if (bar) bar.style.width = fa1SprintStamina + '%';
+}
+
 // Game over → reinicia el acto
 
 function gameOverFa1() {
@@ -594,6 +624,10 @@ function setupFa1Voice() {
             const txt = e.results[0][0].transcript.toLowerCase().trim();
             if (txt.includes('pausa')) { pauseFa1(); return; }
             if (txt.includes('continuar')) { resumeFa1(); return; }
+            if (txt.includes('sprint') && !fa1Dead && !fa1Paused) {
+                fa1SprintToggle = fa1SprintStamina > 0 ? !fa1SprintToggle : false;
+                return;
+            }
             if ((txt.includes('auxilio') || txt.includes('andanada')) && specialReady && !specialActive && !fa1Dead && !fa1Paused) {
                 activateSpecial(fa1Player, [fa1Enemies, fa1BossEscortGroup], fa1BossPhase && fa1Boss ? {
                     sprite: fa1Boss,
