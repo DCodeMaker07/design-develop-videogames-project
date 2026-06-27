@@ -18,6 +18,30 @@ const BATTLE_POSITIONS = {
     enemyY: 916 / 2
 };
 
+function createAnchorAnimation(game) {
+    let ancla = game.add.sprite(1717 - 60, 916 - 60, 'ancla');
+    ancla.anchor.setTo(0.5);
+    ancla.width = 80;
+    ancla.height = 80;
+
+    // Guardar el scale real (80/192 ≈ 0.417), no 1, para restaurar correctamente
+    const origScaleX = ancla.scale.x;
+
+    function doFlip() {
+        game.add.tween(ancla.scale)
+            .to({ x: 0 }, 500, Phaser.Easing.Sinusoidal.InOut, true)
+            .onComplete.add(() => {
+                game.add.tween(ancla.scale)
+                    .to({ x: origScaleX }, 500, Phaser.Easing.Sinusoidal.InOut, true)
+                    .onComplete.add(() => {
+                        game.time.events.add(800, doFlip);
+                    });
+            });
+    }
+    doFlip();
+    return ancla;
+}
+
 // speedMult/fireRateMult = enemigos | playerSpeedMult = jugador | damageTakenMult = daño recibido | bossHPMult = HP del boss
 window.DIFFICULTY_SETTINGS = {
     facil:   { speedMult: 0.50, fireRateMult: 1.70, playerSpeedMult: 1.3, damageTakenMult: 0.6, bossHPMult: 0.6 },
