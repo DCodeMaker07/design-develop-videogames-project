@@ -87,7 +87,7 @@ let firstActState = {
 
         fa1Music = game.add.audio('bgMusicFa1');
         fa1Music.loop = true;
-        fa1Music.volume = 0.8;
+        fa1Music.volume = 0.3;
         fa1Music.play();
 
         fa1Background = game.add.tileSprite(0, 0, 1717, 916, 'bg-fa1');
